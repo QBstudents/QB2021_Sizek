@@ -1,11 +1,14 @@
 ---
-title: '3\. Worksheet: Basic R'
+output:
+  pdf_document: default
+  html_document: default
+---
+---
+title: '3Worksheet'
 author: "Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
 geometry: margin=2.54cm
----
-
+---s
 ## OVERVIEW
 
 This worksheet introduces some of the basic features of the R computing environment (http://www.r-project.org).
@@ -288,23 +291,43 @@ Using the R code chunk below, do the following:
 1) Order the nutrient treatments from low to high (see handout).
 2) Produce a barplot to visualize zooplankton biomass in each nutrient treatment.
 3) Include error bars (+/- 1 sem) on your plot and label the axes appropriately.
-4) Use a one-way analysis of variance (ANOVA) to test the null hypothesis that zooplankton biomass is affected by the nutrient treatment.
 
 
 ```{r}
-
 zNuts <- factor(zoopNuts$NUTS, levels = c('L','M','H'))
-
-
-
+zp.means<-tapply(zoopNuts$ZP,zNuts,mean)
+sem <- function(x){
+  sd(na.omit(x))/sqrt(length(na.omit(x)))
+}
+zp.sem<- tapply(zoopNuts$ZP,zNuts,sem)
+bp <- barplot(zp.means,
+              ylim = c(0,round(max(zoopNuts$ZP),digits=0)),
+              xlab = "Nutrient Supply",
+              ylab = "Zooplankton biomass mg/L",
+              names.arg = c("low","medium","high"))
+arrows(x0=bp,y0=zp.means,y1 = zp.means - zp.sem,angle =90)
+arrows(x0=bp,y0=zp.means,y1 = zp.means + zp.sem,angle =90)
 
 
 ```
-
+4) Use a one-way analysis of variance (ANOVA) to test the null hypothesis that zooplankton biomass is affected by the nutrient treatment.
+```{r}
+fitanova <- aov(ZP ~ zNuts, data=zoopNuts)
+summary(fitanova)
+TukeyHSD(fitanova)
+``` 
+```{r}
+par(mfrow= c(2,2),mar = c(5.1,4.1,4.1,2.1))
+plot(fitanova)
+``` 
 ## SYNTHESIS: SITE-BY-SPECIES MATRIX
 
 In the R code chunk below, load the zoops.txt data set in your **3.RStudio** data folder.
 Create a site-by-species matrix (or dataframe) that does *not* include TANK or NUTS.
+```{r}
+zoops <- read.table("data/zoops.txt",sep = "\t", header = TRUE)
+zoops.species <- zoops[3:11]
+``` 
 The remaining columns of data refer to the biomass (µg/L) of different zooplankton taxa: 
   
   + CAL = calanoid copepods
@@ -328,12 +351,52 @@ The remaining columns of data refer to the biomass (µg/L) of different zooplank
 ***Question 6***: With the visualization and statistical tools that we learned about in the **3. RStudio** handout, use the site-by-species matrix to assess whether and how different zooplankton taxa were responsible for the total biomass (ZP) response to nutrient enrichment. 
 Describe what you learned below in the "Answer" section and include appropriate code in the R chunk.
 
+> I don't really get what is being asked here but I'll do my interpretation of the question. 
+> We have multiple species whose means are changing across a nutrient level, L,M,H. This makes me think that running an anova by species would be good because we are wanting to know the species response to a nutrient change. 
+
 ```{r}
-
-
-
-
+for (species in names(zoops.species)){
+  fitanova <- aov(eval(as.symbol(species)) ~ NUTS,data=zoops)
+  print(species)
+  print(TukeyHSD(fitanova))
+}
 ```
+
+> From this it looks like there is a increase in CHYD across environments that is significant. SIMO is also possitively correlated but not to as great of an effect as CHYD. Some species have correlation across environment types. Another way we could analize this data is with a grouped bar plot:
+
+```{r}
+#Don't know how to do this any other way: 
+zpNUTS <- factor(zoops$NUTS, levels = c('L','M','H'))
+zspe.means<-c(tapply(zoops$CAL,zpNUTS,mean)/mean(zoops$CAL),
+              tapply(zoops$DIAP,zpNUTS,mean)/mean(zoops$DIAP),
+              tapply(zoops$CYCL,zpNUTS,mean)/mean(zoops$CYCL),
+              tapply(zoops$BOSM,zpNUTS,mean)/mean(zoops$BOSM),
+              tapply(zoops$SIMO,zpNUTS,mean)/mean(zoops$SIMO),
+              tapply(zoops$CERI,zpNUTS,mean)/mean(zoops$CERI),
+              tapply(zoops$NAUP,zpNUTS,mean)/mean(zoops$NAUP),
+              tapply(zoops$DLUM,zpNUTS,mean)/mean(zoops$DLUM),
+              tapply(zoops$CHYD,zpNUTS,mean)/mean(zoops$CHYD))
+sem <- function(x){
+  sd(na.omit(x))/sqrt(length(na.omit(x)))
+}
+zspe.sem<-c(tapply(zoops$CAL,zpNUTS,mean),
+              tapply(zoops$DIAP,zpNUTS,sem),
+              tapply(zoops$CYCL,zpNUTS,sem),
+              tapply(zoops$BOSM,zpNUTS,sem),
+              tapply(zoops$SIMO,zpNUTS,sem),
+              tapply(zoops$CERI,zpNUTS,sem),
+              tapply(zoops$NAUP,zpNUTS,sem),
+              tapply(zoops$DLUM,zpNUTS,sem),
+              tapply(zoops$CHYD,zpNUTS,sem))
+bp <- barplot(zspe.means,
+              # ylim = c(0,round(max(zspe.means)+max(zspe.sem),digits=0)),
+              xlab = "Nutrient Supply per organism",
+              ylab = "Normalized Biomass (mean biomass at nutrient level/mean biomass for all nutrient levels",
+              )
+# arrows(x0=bp,y0=zspe.means,y1 = zspe.means - zspe.sem,angle =90)
+# arrows(x0=bp,y0=zspe.means,y1 = zspe.means + zspe.sem,angle =90)
+``` 
+> I don't know how to organize this better in the coding language to make it prettier, but we can kind of see if you squint that there are two organisms that have a possitive trend pattern, CHYD and SIMO, and the rest are more indeterminant, though a case could be made for decreasing for NAUP and DLUM.
 
 ## SUBMITTING YOUR WORKSHEET
 Use Knitr to create a PDF of your completed **3.RStudio_Worksheet.Rmd** document, push the repo to GitHub, and create a pull request.
