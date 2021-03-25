@@ -142,7 +142,7 @@ Both columns should consist of random numbers.
 Make the mean of the first column equal to 8 with a standard deviation of 2 and the mean of the second column equal to 25 with a standard deviation of 10.
 
 ```{r}
-
+m <- matrix(c(rnorm(5,8,2),rnorm(5,25,10)),nrow=5,ncol=2)
 ```
 
 ***Question 1***: What does the `rnorm` function do? 
@@ -150,7 +150,7 @@ What do the arguments in this function specify?
 Remember to use `help()` or type `?rnorm`.
 
 > Answer 1:
-
+> The `rnorm` function produces a series of `n` random numbers drawn from a random distribution, with a mean of zero and a sd of 1 by default.  
 
 In the R code chunk below, do the following: 
 1) Load `matrix.txt` from the **3.RStudio** data folder as matrix `m`.
@@ -158,8 +158,9 @@ In the R code chunk below, do the following:
 3) Determine the dimensions of the transposed matrix.
 
 ```{r}
-
-
+m <- as.matrix(read.table("./data/matrix.txt"),sep="\t",header=FALSE)
+m <- t(m)
+dim(m) 
 
 ```
 
@@ -167,6 +168,7 @@ In the R code chunk below, do the following:
 ***Question 2***: What are the dimensions of the matrix you just transposed?
 
 > Answer 2:
+> 5 rows by 10 columns
 
 
 ###Indexing a Matrix
@@ -176,7 +178,7 @@ In the R code chunk below, do the following:
 2) Remove the last row of matrix `m`.
 
 ```{r}
-
+n <- m[1:4,c(seq(0,2,1),seq(4,10,1))]
 
 ```
 
@@ -188,8 +190,8 @@ In the R code chunk below, do the following:
 2) Display the structure of this data set.
 
 ```{r}
-
-
+zoops <- read.table("data/zoops.txt",sep = "\t", header = TRUE)
+str(zoops)
 ```
 
 ### Correlation
@@ -200,14 +202,19 @@ In the R-code chunk below, do the following:
 3) Conduct a simple **Pearson's correlation** analysis.
 
 ```{r}
-
-
+zoops.num <- zoops[,3:11]
+pairs(zoops.num)
 ```
-
+```{r}
+cor1 <-cor(zoops.num)
+print(cor1, digits= 3)
+``` 
 
 ***Question 3***: Describe some of the general features based on the visualization and correlation analysis above?
 
 > Answer 3:
+> DLUM has alot of zero values. NAUP has three values. There are quite a few near zero values. 
+> Most of the negative correlations are not too strong consisting really of situations where there are not high-high values. The positive correlations are harder to tease out but appear to be drawn from a small subset of high-high values. More analysis would be needed. 
 
 
 In the R code chunk below, do the following:
@@ -216,11 +223,19 @@ In the R code chunk below, do the following:
 3) Use the print command from the handout to see the results of each correlation analysis.
 
 ```{r}
-
-
-
+# install.packages("psych")
+require("psych")
+cor2 <- corr.test(zoops.num, method = "pearson", adjust = "BH")
+print(cor2,digits=3)
 ```
-
+```{r}
+cor4 <- corr.test(zoops.num, method = "kendall", adjust = "BH")
+print(cor4,digits=3)
+``` 
+```{r}
+cor3 <- corr.test(zoops.num, method = "spearman", adjust = "BH")
+print(cor3,digits=3)
+``` 
 ***Question 4***: 
 Describe what you learned from `corr.test`. 
 Specifically, are the results sensitive to whether you use parametric (i.e., Pearson's) or non-parametric methods?
@@ -229,6 +244,8 @@ With the Pearson's method, is there evidence for false discovery rate due to mul
 Why is false discovery rate important?
 
 > Answer 4: 
+> Looks like the non-parametric methods didn't find as much correlation in the data. I would use the non-parametric methods when looking at where rank is more important (spearmans, where x is ranked, kendall when both items are ranked.)
+> Dependent on the threshold for discovery, yes. False discovery rate is somewhat important, because the p-value is a calculation that uses a base null model to see the probability of an event occurring by random given the data and the number of tests. I would just use it as a earmark/intuition check, other properties could be more important like effect size. 
 
 ### Linear Regression
 
@@ -238,22 +255,31 @@ In the R code chunk below, do the following:
 3) Produce a plot of this regression analysis including the following: categorically labeled points, the predicted regression line with 95% confidence intervals, and the appropriate axis labels.
 
 ```{r}
+zoopNuts <- read.table("data/zoop_nuts.txt",sep = "\t", header = TRUE)
 
-
-
-
-
-
-
+lmZN <- lm(ZP ~ TN,data = zoopNuts)
+print(lmZN)
 ```
-
+```{r}
+plot(zoopNuts$TN,zoopNuts$ZP,
+     ylim = c(0,10),
+     xlab = expression(paste("Total Nitrogen(", mu,"g/L)")),
+     ylab = "Zooplankton Biomas (mg/L)",
+     las =1)
+xline <- seq(min(zoopNuts$TN),max(zoopNuts$TN),5)
+text(zoopNuts$TN,zoopNuts$ZP,zoopNuts$NUTS, pos =3, cex =0.8)
+lines(xline,predict(lmZN,newdata = data.frame(TN = xline)))
+conf95 <- predict(lmZN,newdata=data.frame(TN=xline), interval = c("confidence"),level = 0.95, type="response")
+matlines(xline, conf95[,c("lwr","upr")], type = "l", lty = 2, lwd =1, col="black")
+``` 
 ***Question 5***: Interpret the results from the regression model
 
-> Answer 5:
+> Answer 5: These results from the residual plots look ok. I don't really get what each plot is actually saying beside the residuals v fitted. 
 
 
 ```{r}
-
+par(mfrow= c(2,2),mar = c(5.1,4.1,4.1,2.1))
+plot(lmZN)
 ```
 
 ### Analysis of Variance (ANOVA)
@@ -267,7 +293,7 @@ Using the R code chunk below, do the following:
 
 ```{r}
 
-
+zNuts <- factor(zoopNuts$NUTS, levels = c('L','M','H'))
 
 
 
