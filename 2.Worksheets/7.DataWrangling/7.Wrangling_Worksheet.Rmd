@@ -1,6 +1,6 @@
 ---
 title: '7\. Data wrangling with simulated communitites'
-author: 'Z620: Quantitative Biodiversity, Indiana University'
+author: 'Sizek Z620: Quantitative Biodiversity, Indiana University'
 header-includes:
    - \usepackage{array}
 output: pdf_document
@@ -20,7 +20,7 @@ We will learn about these tools while also gaining exposure to R packages that a
 ```{r, results = 'hide'}
 rm(list=ls()) 
 getwd() 
-setwd("~/GitHub/QB-2021/1.Handouts/7.ControlStructures")
+setwd("D:/GitHub/QB2021_Sizek/2.Worksheets/7.DataWrangling")
 ```
 
 ## 2) SIMULATE BIODIVERSITY 
@@ -121,7 +121,7 @@ comm_mat1_diversity[,2] <- diversity(comm_mat1$spec_dat, index = "shannon")[1:10
 comm_mat1_diversity[,3] <- diversity(comm_mat1$spec_dat, index = "invsimpson")[1:10]
 
 # Examine summary of diversity measures across quadrats
-#print(comm_mat1_diversity)
+print(comm_mat1_diversity)
 ```
 
 ## 2) WRANGLING SIMULATED DATA
@@ -157,7 +157,7 @@ for(i in 1:10) {
 colnames(comm_mat1_diversity)[4:5] <- c('mean_sp','se_sp')
 
 # Examine summary of diversity measures across quadrats
-#print(comm_mat1_diversity)
+print(comm_mat1_diversity)
 ```
 
 ### B. Summarize diversity data with the `apply` function
@@ -240,7 +240,26 @@ But the SAR is also influenced by biological phenomena including dispersal limit
 1. Using the `sim_poisson_community` function from the `mobsim`, along with any of the data wrangling tools described above, construct a species area relationship (SAR).
 Feel free to choose different values for the the function's arguments. 
 Create an SAR plot and calculate the corresponding *z*-value. 
+```{r}
+# Generate Communities
+comA <- sim_poisson_community(s_pool = 25, n_sim = 10000, sad_type = "lnorm", 
+        sad_coef = list("meanlog" = 2, "sdlog" = 1))
+# visualize site
+#plot(com1)
+#Generate Quadrats
+q_areaMean <-function(community,q_area,q_n){
+  comm_matA <- sample_quadrats(community, n_quadrats = q_n, quadrat_area = q_area, 
+             method = "grid", avoid_overlap = F, plot=F);
+  row.names(comm_matA$xy_dat) <- quads;
+  row.names(comm_matA$spec_dat) <- quads;
+  return( mean(specnumber(comm_matA$spec_dat)))
+}
 
+q_areas <- seq(0.0001,0.005,0.0001)
+for (q_area in q_areas){
+  q_areaMean(comA,q_area,10)
+}
+``` 
 2. The `sim_poisson_community`function simulates species that have a random spatial distribution.
 However, in nature, this is rarely the case. 
 Species often have patchy distributions, which can be simulated in `mobsim` using the the `sim_thomas_community` function.
