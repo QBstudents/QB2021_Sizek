@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
 ---
-
+  
 ## OVERVIEW
 
 In this worksheet, we move beyond the investigation of within-site $\alpha$-diversity.
@@ -50,7 +50,9 @@ In the R code chunk below, provide the code to:
 
 ```{r}
 
-
+for (i  in c("vegan","ade4", "viridis", "gplots", "BiodiversityR", "indicspecies")){
+  require(i,character.only=TRUE)
+}
 
 
 ```
@@ -65,30 +67,47 @@ In the R code chunk below, do the following:
 ```{r}
 # note, pleae do not print the dataset when submitting
 
-
-
+data(doubs)
+summary(doubs)
 ```
 
 ***Question 1***:  Describe some of the attributes of the `doubs` dataset.  
 
 a.  How many objects are in `doubs`?
-b.  How many fish species are there in the `doubs` dataset?
-c.  How many sites are in the `doubs` dataset?
+> ***Answer 1a***:  4
 
-> ***Answer 1a***:  
-> ***Answer 1b***:  
-> ***Answer 1c***:  
+b.  How many fish species are there in the `doubs` dataset?
+> ***Answer 1b***:  27
+
+c.  How many sites are in the `doubs` dataset?
+> ***Answer 1c***:  30
 
 ### Visualizing the Doubs River Dataset
 
 ***Question 2***: Answer the following questions based on the spatial patterns of richness (i.e., $\alpha$-diversity) and Brown Trout (*Salmo trutta*) abundance in the Doubs River.  
 
 a.  How does fish richness vary along the sampled reach of the Doubs River?
+> ***Answer 2a***:  
+
+```{r}
+S.obs <- function(x=''){
+  rowSums(x>0)*1
+}
+cFisher <-function(x=''){
+  fisher.alpha(as.integer(as.vector(x[x>0])))
+}
+S.obs(doubs$fish)
+apply(doubs$fish,cFisher)
+
+``` 
+
 b.  How does Brown Trout (*Salmo trutta*) abundance vary along the sampled reach of the Doubs River?
+> ***Answer 2b***:  
+
+
 c.  What do these patterns say about the limitations of using richness when examining patterns of biodiversity?
 
-> ***Answer 2a***:  
-> ***Answer 2b***:  
+
 > ***Answer 2c***:  
 
 ## 3) QUANTIFYING BETA-DIVERSITY
