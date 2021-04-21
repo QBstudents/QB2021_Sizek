@@ -1,0 +1,1223 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={8. Worksheet: Among Site (Beta) Diversity -- Part 1},
+  pdfauthor={Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{8. Worksheet: Among Site (Beta) Diversity -- Part 1}
+\author{Herbert Sizek; Z620: Quantitative Biodiversity, Indiana
+University}
+\date{21 April, 2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{overview}{%
+\subsection{OVERVIEW}\label{overview}}
+
+In this worksheet, we move beyond the investigation of within-site
+\(\alpha\)-diversity. We will explore \(\beta\)-diversity, which is
+defined as the diversity that occurs among sites. This requires that we
+examine the compositional similarity of assemblages that vary in space
+or time.
+
+After completing this exercise you will know how to:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  formally quantify \(\beta\)-diversity
+\item
+  visualize \(\beta\)-diversity with heatmaps, cluster analysis, and
+  ordination
+\item
+  test hypotheses about \(\beta\)-diversity using multivariate
+  statistics
+\end{enumerate}
+
+\hypertarget{directions}{%
+\subsection{Directions:}\label{directions}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  In the Markdown version of this document in your cloned repo, change
+  ``Student Name'' on line 3 (above) with your name.
+\item
+  Complete as much of the worksheet as possible during class.
+\item
+  Use the handout as a guide; it contains a more complete description of
+  data sets along with examples of proper scripting needed to carry out
+  the exercises.
+\item
+  Answer questions in the worksheet. Space for your answers is provided
+  in this document and is indicated by the ``\textgreater{}'' character.
+  If you need a second paragraph be sure to start the first line with
+  ``\textgreater{}''. You should notice that the answer is highlighted
+  in green by RStudio (color may vary if you changed the editor theme).
+\item
+  Before you leave the classroom today, it is \emph{imperative} that you
+  \textbf{push} this file to your GitHub repo, at whatever stage you
+  are. Ths will enable you to pull your work onto your own computer.
+\item
+  When you have completed the worksheet, \textbf{Knit} the text and code
+  into a single PDF file by pressing the \texttt{Knit} button in the
+  RStudio scripting panel. This will save the PDF output in your
+  `8.BetaDiversity' folder.
+\item
+  After Knitting, please submit the worksheet by making a \textbf{push}
+  to your GitHub repo and then create a \textbf{pull request} via
+  GitHub. Your pull request should include this file
+  (\textbf{8.BetaDiversity\_1\_Worksheet.Rmd}) with all code blocks
+  filled out and questions answered) and the PDF output of
+  \texttt{Knitr}\\
+  (\textbf{8.BetaDiversity\_1\_Worksheet.pdf}).
+\end{enumerate}
+
+The completed exercise is due on \textbf{Friday, April
+16\textsuperscript{th}, 2021 before 09:00 AM}.
+
+\hypertarget{r-setup}{%
+\subsection{1) R SETUP}\label{r-setup}}
+
+Typically, the first thing you will do in either an R script or an
+RMarkdown file is setup your environment. This includes things such as
+setting the working directory and loading any packages that you will
+need.
+
+In the R code chunk below, provide the code to:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  clear your R environment,
+\item
+  print your current working directory,
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{rm}\NormalTok{(}\AttributeTok{list=}\FunctionTok{ls}\NormalTok{())}
+\FunctionTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "D:/GitHub/QB2021_Sizek/2.Worksheets/8.BetaDiversity"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{setwd}\NormalTok{(}\StringTok{"D:/GitHub/QB2021\_Sizek/2.Worksheets/8.BetaDiversity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  set your working directory to your ``\emph{/8.BetaDiversity}'' folder,
+  and
+\item
+  load the \texttt{vegan} R package (be sure to install if needed).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (i  }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\StringTok{"vegan"}\NormalTok{,}\StringTok{"ade4"}\NormalTok{, }\StringTok{"viridis"}\NormalTok{, }\StringTok{"gplots"}\NormalTok{, }\StringTok{"BiodiversityR"}\NormalTok{, }\StringTok{"indicspecies"}\NormalTok{))\{}
+  \FunctionTok{require}\NormalTok{(i,}\AttributeTok{character.only=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: vegan
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'vegan' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: permute
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'permute' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## This is vegan 2.5-7
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: ade4
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'ade4' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: viridis
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: viridisLite
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'viridisLite' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: gplots
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'gplots' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'gplots'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:stats':
+## 
+##     lowess
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: BiodiversityR
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'BiodiversityR' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: tcltk
+\end{verbatim}
+
+\begin{verbatim}
+## Registered S3 methods overwritten by 'lme4':
+##   method                          from
+##   cooks.distance.influence.merMod car 
+##   influence.merMod                car 
+##   dfbeta.influence.merMod         car 
+##   dfbetas.influence.merMod        car
+\end{verbatim}
+
+\begin{verbatim}
+## BiodiversityR 2.12-3: Use command BiodiversityRGUI() to launch the Graphical User Interface; 
+## to see changes use BiodiversityRGUI(changeLog=TRUE, backward.compatibility.messages=TRUE)
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: indicspecies
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'indicspecies' was built under R version 3.6.3
+\end{verbatim}
+
+\hypertarget{loading-data}{%
+\subsection{2) LOADING DATA}\label{loading-data}}
+
+\hypertarget{load-dataset}{%
+\subsubsection{Load dataset}\label{load-dataset}}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  load the \texttt{doubs} dataset from the \texttt{ade4} package, and
+\item
+  explore the structure of the dataset.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# note, pleae do not print the dataset when submitting}
+
+\FunctionTok{data}\NormalTok{(doubs)}
+\FunctionTok{summary}\NormalTok{(doubs)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         Length Class      Mode
+## env     11     data.frame list
+## fish    27     data.frame list
+## xy       2     data.frame list
+## species  4     data.frame list
+\end{verbatim}
+
+\textbf{\emph{Question 1}}: Describe some of the attributes of the
+\texttt{doubs} dataset.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\item
+  How many objects are in \texttt{doubs}? \textgreater{}
+  \textbf{\emph{Answer 1a}}: 4
+\item
+  How many fish species are there in the \texttt{doubs} dataset?
+  \textgreater{} \textbf{\emph{Answer 1b}}: 27
+\item
+  How many sites are in the \texttt{doubs} dataset? \textgreater{}
+  \textbf{\emph{Answer 1c}}: 30
+\end{enumerate}
+
+\hypertarget{visualizing-the-doubs-river-dataset}{%
+\subsubsection{Visualizing the Doubs River
+Dataset}\label{visualizing-the-doubs-river-dataset}}
+
+\textbf{\emph{Question 2}}: Answer the following questions based on the
+spatial patterns of richness (i.e., \(\alpha\)-diversity) and Brown
+Trout (\emph{Salmo trutta}) abundance in the Doubs River.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  How does fish richness vary along the sampled reach of the Doubs
+  River? \textgreater{} \textbf{\emph{Answer 2a}}:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{S.obs }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{x=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{)\{}
+  \FunctionTok{rowSums}\NormalTok{(x}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{)}\SpecialCharTok{*}\DecValTok{1}
+\NormalTok{\}}
+\NormalTok{cFisher }\OtherTok{\textless{}{-}}\ControlFlowTok{function}\NormalTok{(}\AttributeTok{x=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{)\{}
+  \FunctionTok{fisher.alpha}\NormalTok{(}\FunctionTok{as.integer}\NormalTok{(}\FunctionTok{as.vector}\NormalTok{(x[x}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{])))}
+\NormalTok{\}}
+\FunctionTok{S.obs}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 
+##  1  3  4  8 11 10  5  0  5  6  6  6  6 10 11 17 22 23 23 22 23 22  3  8  8 21 
+## 27 28 29 30 
+## 22 22 26 21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{apply}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish,}\DecValTok{1}\NormalTok{,cFisher)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          1          2          3          4          5          6          7 
+##  0.5252543  1.2838726  1.7118462  4.7170847  5.6420718  7.4791167  2.4967465 
+##          8          9         10         11         12         13         14 
+##  1.0000000  2.7823859  3.9775884  5.4028053  3.1515726  3.0201644  5.5647670 
+##         15         16         17         18         19         20         21 
+##  5.7778860 11.1701802 17.5099120 20.8366287 18.3058149 13.3546197 13.2359384 
+##         22         23         24         25         26         27         28 
+## 10.8014143  5.4525555  6.9657122 13.1934641 16.2109829 12.0091137 11.0334863 
+##         29         30 
+## 12.5581380  8.6723803
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\item
+  How does Brown Trout (\emph{Salmo trutta}) abundance vary along the
+  sampled reach of the Doubs River? \textgreater{} \textbf{\emph{Answer
+  2b}}: There are regions where there is higher abundance and regions
+  with lower abundance, low - medium - low - medium - high - low - high
+\item
+  What do these patterns say about the limitations of using richness
+  when examining patterns of biodiversity?
+\end{enumerate}
+
+\begin{quote}
+\textbf{\emph{Answer 2c}}: There is spatial variation in richness across
+space, so if your habitat of interest is heterogeneous the samples might
+reflect the habitat health or some other variable rather than a large
+variation in species richness.
+\end{quote}
+
+\hypertarget{quantifying-beta-diversity}{%
+\subsection{3) QUANTIFYING
+BETA-DIVERSITY}\label{quantifying-beta-diversity}}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  write a function (\texttt{beta.w()}) to calculate Whittaker's
+  \(\beta\)-diversity (i.e., \(\beta_{w}\)) that accepts a
+  site-by-species matrix with optional arguments to specify pairwise
+  turnover between two sites, and
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta.w }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{site.by.species =} \StringTok{""}\NormalTok{,}\AttributeTok{sitenum1=}\StringTok{""}\NormalTok{,}\AttributeTok{sitenum2=}\StringTok{""}\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{ (sitenum1}\SpecialCharTok{==}\StringTok{""} \SpecialCharTok{|}\NormalTok{ sitenum2}\SpecialCharTok{==}\StringTok{""}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{xor}\NormalTok{(sitenum1}\SpecialCharTok{==}\StringTok{""}\NormalTok{,sitenum2}\SpecialCharTok{==}\StringTok{""}\NormalTok{))\{}
+      \FunctionTok{warning}\NormalTok{(}\StringTok{"beta.w: One site was specified, returning beta for entire SbyS matrix"}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{    SbyS.pa }\OtherTok{\textless{}{-}} \FunctionTok{decostand}\NormalTok{(site.by.species,}\AttributeTok{method =} \StringTok{"pa"}\NormalTok{) }\CommentTok{\# convert to presence absence}
+\NormalTok{    S }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(SbyS.pa[,}\FunctionTok{which}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(SbyS.pa)}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{)])}
+\NormalTok{    a.bar}\OtherTok{\textless{}{-}}\FunctionTok{mean}\NormalTok{(}\FunctionTok{specnumber}\NormalTok{(SbyS.pa))}
+\NormalTok{    b.w }\OtherTok{\textless{}{-}}\FunctionTok{round}\NormalTok{(S}\SpecialCharTok{/}\NormalTok{a.bar,}\DecValTok{3}\NormalTok{)}
+    \FunctionTok{return}\NormalTok{(b.w)}
+\NormalTok{  \}}
+  \ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    site1 }\OtherTok{=}\NormalTok{ site.by.species[sitenum1,]}
+\NormalTok{    site2 }\OtherTok{=}\NormalTok{ site.by.species[sitenum2,]}
+\NormalTok{    site1 }\OtherTok{=} \FunctionTok{subset}\NormalTok{(site1, }\AttributeTok{select =}\NormalTok{ site1}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{)}
+\NormalTok{    site2 }\OtherTok{=} \FunctionTok{subset}\NormalTok{(site2, }\AttributeTok{select =}\NormalTok{ site2}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{)}
+\NormalTok{    gamma }\OtherTok{=} \FunctionTok{union}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(site1),}\FunctionTok{colnames}\NormalTok{(site2))}
+\NormalTok{    s }\OtherTok{=} \FunctionTok{length}\NormalTok{(gamma)}
+\NormalTok{    a.bar }\OtherTok{=} \FunctionTok{mean}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FunctionTok{specnumber}\NormalTok{(site1),}\FunctionTok{specnumber}\NormalTok{(site2)))}
+\NormalTok{    b.w }\OtherTok{=} \FunctionTok{round}\NormalTok{(s}\SpecialCharTok{/}\NormalTok{a.bar }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+    \FunctionTok{return}\NormalTok{(b.w)}
+\NormalTok{  \}}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  use this function to analyze various aspects of \(\beta\)-diversity in
+  the Doubs River.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{beta.w}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2.16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{beta.w}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish,}\DecValTok{5}\NormalTok{,}\DecValTok{26}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.438
+\end{verbatim}
+
+\textbf{\emph{Question 3}}: Using your \texttt{beta.w()} function above,
+answer the following questions:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\item
+  Describe how local richness (\(\alpha\)) and turnover (\(\beta\))
+  contribute to regional (\(\gamma\)) fish diversity in the Doubs.
+  \textgreater{} *\textbf{Answer 3a}: This question is a bit odd,
+  because these three are in a mathamatical relation, being: \$\gamma =
+  \alpha \beta \$, for at least whitaker's \(\beta\) diversity. The two
+  components that are directly measured are \(\alpha\) and \(\gamma\),
+  with the prior being the mean local richness (average number of
+  species per site) and the latter being the total number of species
+  across all sites. This means that as \(beta\) approaches 1, the
+  species are distributed randomly across sites, that is most sites have
+  the same compositions of species. If there is wide variation between
+  species at sites, \(\gamma\) will increase while \(\alpha\) could
+  remain the same, increasing \(\beta\). If the distribution of species
+  in sites increases then \(\alpha\) will fall, increasing \(\beta\).
+\item
+  Is the fish assemblage at site 1 more similar to the one at site 2 or
+  site 10? \textgreater{} \textbf{\emph{Answer 3b}}:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{S.obs}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{10}\NormalTok{),])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  1  2 10 
+##  1  3  6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{beta.w}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{beta.w}\NormalTok{(doubs}\SpecialCharTok{$}\NormalTok{fish,}\DecValTok{1}\NormalTok{,}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.714
+\end{verbatim}
+
+\begin{quote}
+The species at site 1 is more similar to the species at site 2, but this
+is primarily driven by that site 2 has fewer species than site 10.
+\end{quote}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Using your understanding of the equation
+  \(\beta_{w} = \gamma/\alpha\), how would your interpretation of
+  \(\beta\) change if we instead defined beta additively (i.e.,
+  \(\beta = \gamma - \alpha\))? \textgreater{} \textbf{\emph{Answer
+  3c}}: This would make the measure a bit harder for me to understand
+  value in as the number of sites would effect the outcome more. It
+  would be more like a measure of the first moment of species. I don't
+  know really how I would apply it thoughtfully.
+\end{enumerate}
+
+\hypertarget{the-resemblance-matrix}{%
+\subsubsection{The Resemblance Matrix}\label{the-resemblance-matrix}}
+
+In order to quantify \(\beta\)-diversity for more than two samples, we
+need to introduce a new primary ecological data structure: the
+\textbf{Resemblance Matrix}.
+
+\textbf{\emph{Question 4}}: How do incidence- and abundance-based
+metrics differ in their treatment of rare species?
+
+\begin{quote}
+\textbf{\emph{Answer 4}}: Incidence matrices are binary matricies while
+abundance matrices are whole numbers. This means that rare species are
+of equal value in binary matrices while they are not in abundance
+matrices.
+\end{quote}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  make a new object, \texttt{fish}, containing the fish abundance data
+  for the Doubs River,
+\item
+  remove any sites where no fish were observed (i.e., rows with sum of
+  zero),
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fish }\OtherTok{\textless{}{-}}\NormalTok{ doubs}\SpecialCharTok{$}\NormalTok{fish}
+\NormalTok{fish}\OtherTok{\textless{}{-}}\NormalTok{ fish[}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{(fish)}\SpecialCharTok{==}\DecValTok{0}\NormalTok{),] }\CommentTok{\#remove rows with zero values. }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  construct a resemblance matrix based on Sørensen's Similarity
+  (``fish.ds''), and
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fish.ds }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(fish,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{,}\AttributeTok{binary=}\ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  construct a resemblance matrix based on Bray-Curtis Distance
+  (``fish.db'').
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fish.db }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(fish,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{\emph{Question 5}}: Using the distance matrices from above,
+answer the following questions:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Does the resemblance matrix (\texttt{fish.db}) represent similarity or
+  dissimilarity? What information in the resemblance matrix led you to
+  arrive at your answer? \textgreater{} \textbf{\emph{Answer 5a}}:
+  Dissimilarity is closer to 1, because the values close to the diagnal
+  are near zero, while farther away (farther away sites) are near 1.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order }\OtherTok{\textless{}{-}} \FunctionTok{rev}\NormalTok{(}\FunctionTok{attr}\NormalTok{(fish.db,}\StringTok{"Labels"}\NormalTok{))}
+\FunctionTok{levelplot}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(fish.db)[,order],}\AttributeTok{aspect=}\StringTok{"iso"}\NormalTok{,}\AttributeTok{col.regions=}\NormalTok{inferno,}\AttributeTok{xlab=}\StringTok{"Doubs Site"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Doubs Site"}\NormalTok{, }\AttributeTok{main=}\StringTok{"Bray{-}Curtis Distance"}\NormalTok{,}\AttributeTok{scales=}\FunctionTok{list}\NormalTok{(}\AttributeTok{cex=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Compare the resemblance matrices (\texttt{fish.db} or
+  \texttt{fish.ds}) you just created. How does the choice of the
+  Sørensen or Bray-Curtis distance influence your interpretation of site
+  (dis)similarity?
+\end{enumerate}
+
+\begin{quote}
+\textbf{\emph{Answer 5b}}: They are fairly similar, Sorensen makes it
+seem that the sites are more homogenous then Bray-Curtis. Sorensen
+generally provides lower values (sites are more similar) in comparison
+to Bray-Curtis.
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order }\OtherTok{\textless{}{-}} \FunctionTok{rev}\NormalTok{(}\FunctionTok{attr}\NormalTok{(fish.ds,}\StringTok{"Labels"}\NormalTok{))}
+\FunctionTok{levelplot}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(fish.ds)[,order],}\AttributeTok{aspect=}\StringTok{"iso"}\NormalTok{,}\AttributeTok{col.regions=}\NormalTok{inferno,}\AttributeTok{xlab=}\StringTok{"Doubs Site"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Doubs Site"}\NormalTok{, }\AttributeTok{main=}\StringTok{"Sorensen Distance"}\NormalTok{,}\AttributeTok{scales=}\FunctionTok{list}\NormalTok{(}\AttributeTok{cex=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order }\OtherTok{\textless{}{-}} \FunctionTok{rev}\NormalTok{(}\FunctionTok{attr}\NormalTok{(fish.ds}\SpecialCharTok{{-}}\NormalTok{fish.db,}\StringTok{"Labels"}\NormalTok{))}
+\FunctionTok{levelplot}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(fish.ds}\SpecialCharTok{{-}}\NormalTok{fish.db)[,order],}\AttributeTok{aspect=}\StringTok{"iso"}\NormalTok{,}\AttributeTok{col.regions=}\NormalTok{inferno,}\AttributeTok{xlab=}\StringTok{"Doubs Site"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Doubs Site"}\NormalTok{, }\AttributeTok{main=}\StringTok{"Sorensen minus Bray{-}Curtis Distance"}\NormalTok{,}\AttributeTok{scales=}\FunctionTok{list}\NormalTok{(}\AttributeTok{cex=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\hypertarget{visualizing-beta-diversity}{%
+\subsection{4) VISUALIZING
+BETA-DIVERSITY}\label{visualizing-beta-diversity}}
+
+\hypertarget{a.-heatmaps}{%
+\subsubsection{A. Heatmaps}\label{a.-heatmaps}}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  define a color palette, \textgreater{} Viridis was imported above
+\item
+  define the order of sites in the Doubs River, and
+\item
+  use the \texttt{levelplot()} function to create a heatmap of fish
+  abundances in the Doubs River.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order }\OtherTok{\textless{}{-}} \FunctionTok{rev}\NormalTok{(}\FunctionTok{attr}\NormalTok{(fish.db,}\StringTok{"Labels"}\NormalTok{))}
+\FunctionTok{levelplot}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(fish.db)[,order],}\AttributeTok{aspect=}\StringTok{"iso"}\NormalTok{,}\AttributeTok{col.regions=}\NormalTok{viridis,}\AttributeTok{xlab=}\StringTok{"Doubs Site"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Doubs Site"}\NormalTok{, }\AttributeTok{main=}\StringTok{"Bray{-}Curtis Distance"}\NormalTok{,}\AttributeTok{scales=}\FunctionTok{list}\NormalTok{(}\AttributeTok{cex=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\hypertarget{b.-cluster-analysis}{%
+\subsubsection{B. Cluster Analysis}\label{b.-cluster-analysis}}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  perform a cluster analysis using Ward's Clustering, and
+\item
+  plot your cluster analysis (use either \texttt{hclust} or
+  \texttt{heatmap.2}).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fish.ward }\OtherTok{\textless{}{-}} \FunctionTok{hclust}\NormalTok{(fish.db, }\AttributeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}\FloatTok{0.1}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(fish.ward,}\AttributeTok{main =} \StringTok{"Doubs River Fish: Ward Clustering"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Squared Bray{-}Curtis Distance"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\textbf{\emph{Question 6}}: Based on cluster analyses and the
+introductory plots that we generated after loading the data, develop an
+ecological hypothesis for fish diversity the \texttt{doubs} data set?
+
+\begin{quote}
+\textbf{\emph{Answer 6}}: There are two general habitats, one that is
+upstream (1-14) and downstream (15 -30), the lower habitat is could be
+broken down into three pieces, but I would want to test against other
+clustering algorithms.
+\end{quote}
+
+\hypertarget{c.-ordination}{%
+\subsubsection{C. Ordination}\label{c.-ordination}}
+
+\hypertarget{principal-coordinates-analysis-pcoa}{%
+\subsubsection{Principal Coordinates Analysis
+(PCoA)}\label{principal-coordinates-analysis-pcoa}}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  perform a Principal Coordinates Analysis to visualize beta-diversity
+\item
+  calculate the variation explained by the first three axes in your
+  ordination
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fish.pcoa }\OtherTok{\textless{}{-}} \FunctionTok{cmdscale}\NormalTok{(fish.db, }\AttributeTok{eig =}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{k=}\DecValTok{3}\NormalTok{)}
+\NormalTok{var1 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig),}\DecValTok{3}\NormalTok{)}
+\NormalTok{var2 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig),}\DecValTok{3}\NormalTok{)}
+\NormalTok{var3 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{eig),}\DecValTok{3}\NormalTok{)}
+\NormalTok{sum.eig }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(var1,var2,var3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  plot the PCoA ordination,
+\item
+  label the sites as points using the Doubs River site number, and
+\item
+  identify influential species and add species coordinates to PCoA plot.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fishREL }\OtherTok{\textless{}{-}}\NormalTok{ fish}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(fish))\{}
+\NormalTok{  fishREL[i,] }\OtherTok{=}\NormalTok{ fish[i,]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(fish[i,])}
+\NormalTok{\}}
+
+\NormalTok{fish.pcoa }\OtherTok{\textless{}{-}}\FunctionTok{add.spec.scores}\NormalTok{(fish.pcoa,fishREL,}\AttributeTok{method=}\StringTok{"pcoa.scores"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}\FloatTok{0.1}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{1}\NormalTok{],fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{2}\NormalTok{],}\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.2}\NormalTok{,}\FloatTok{0.7}\NormalTok{),}
+     \AttributeTok{xlab =} \FunctionTok{paste}\NormalTok{(}\StringTok{"PCoA 1("}\NormalTok{,var1}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\StringTok{"\%)"}\NormalTok{,}\AttributeTok{sep=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{),}
+     \AttributeTok{ylab =} \FunctionTok{paste}\NormalTok{(}\StringTok{"PCoA 2("}\NormalTok{,var2}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\StringTok{"\%)"}\NormalTok{,}\AttributeTok{sep=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{),}
+     \AttributeTok{pch =}\DecValTok{16}\NormalTok{ ,}\AttributeTok{cex =}\FloatTok{2.0}\NormalTok{,}\AttributeTok{type =}\StringTok{\textquotesingle{}n\textquotesingle{}}\NormalTok{,}\AttributeTok{cex.lab=}\FloatTok{1.5}\NormalTok{,}\AttributeTok{cex.axis=}\FloatTok{1.2}\NormalTok{,}\AttributeTok{axes=}\ConstantTok{FALSE}
+\NormalTok{     )}
+
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side =}\DecValTok{1}\NormalTok{, }\AttributeTok{labels=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{lwd.ticks=}\DecValTok{2}\NormalTok{,}\AttributeTok{cex.axis =}\FloatTok{1.2}\NormalTok{,}\AttributeTok{las=}\DecValTok{1}\NormalTok{)}
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side =}\DecValTok{2}\NormalTok{, }\AttributeTok{labels=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{lwd.ticks=}\DecValTok{2}\NormalTok{,}\AttributeTok{cex.axis =}\FloatTok{1.2}\NormalTok{,}\AttributeTok{las=}\DecValTok{1}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{0}\NormalTok{,}\AttributeTok{v=}\DecValTok{0}\NormalTok{,}\AttributeTok{lty=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{box}\NormalTok{(}\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{1}\NormalTok{],fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{2}\NormalTok{],}
+       \AttributeTok{pch =}\DecValTok{19}\NormalTok{, }\AttributeTok{cex =}\DecValTok{3}\NormalTok{, }\AttributeTok{bg=}\StringTok{\textquotesingle{}gray\textquotesingle{}}\NormalTok{,}\AttributeTok{col=}\StringTok{\textquotesingle{}gray\textquotesingle{}}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{1}\NormalTok{],fish.pcoa}\SpecialCharTok{$}\NormalTok{points[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{labels =}\FunctionTok{row.names}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{points))}
+
+\FunctionTok{text}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{cproj[,}\DecValTok{1}\NormalTok{], fish.pcoa}\SpecialCharTok{$}\NormalTok{cproj[,}\DecValTok{2}\NormalTok{], }\AttributeTok{labels =} \FunctionTok{row.names}\NormalTok{(fish.pcoa}\SpecialCharTok{$}\NormalTok{cproj),}\AttributeTok{col=}\StringTok{"black"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+In the R code chunk below, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  identify influential species based on correlations along each PCoA
+  axis (use a cutoff of 0.70), and
+\item
+  use a permutation test (999 permutations) to test the correlations of
+  each species along each axis.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{spe.corr }\OtherTok{\textless{}{-}} \FunctionTok{add.spec.scores}\NormalTok{(fish.pcoa,fishREL,}\AttributeTok{method =} \StringTok{"cor.scores"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{cproj}
+\NormalTok{corr.cut }\OtherTok{\textless{}{-}} \FloatTok{0.7}
+\NormalTok{imp.spp }\OtherTok{\textless{}{-}}\NormalTok{spe.corr[}\FunctionTok{abs}\NormalTok{(spe.corr[,}\DecValTok{1}\NormalTok{])}\SpecialCharTok{\textgreater{}=}\NormalTok{corr.cut }\SpecialCharTok{|} \FunctionTok{abs}\NormalTok{(spe.corr[,}\DecValTok{2}\NormalTok{])}\SpecialCharTok{\textgreater{}=}\NormalTok{ corr.cut,]}
+\NormalTok{fit }\OtherTok{\textless{}{-}}\FunctionTok{envfit}\NormalTok{(fish.pcoa,fishREL,}\AttributeTok{perm=}\DecValTok{999}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{\emph{Question 7}}: Address the following questions about the
+ordination results of the \texttt{doubs} data set:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\item
+  Describe the grouping of sites in the Doubs River based on fish
+  community composition. \textgreater{} \textbf{\emph{Answer 7a}}:
+  Because the PCoA is separating out based on the same principles as
+  Ward Clustering (correlation levels between groups), just with
+  slightly different methods, we see the same results, where there is
+  the general two groups of 1-14 and 15-30 with the exception that 15 is
+  similar to 1-14 on the first two PCs. The separation along the first
+  PC appears mainly to be driven by the presence or absence of three
+  species.
+\item
+  Generate a hypothesis about which fish species are potential
+  indicators of river quality. \textgreater{} \textbf{\emph{Answer 7b}}:
+  This question is too subjective. How do you define river quality? For
+  example, if we are selecting for local diveristy, we might say that
+  Alal is deterimental to the river quality, but it could also be that
+  Alal is more constrained to a specific habitat or are expert niche
+  constructors and exclude other species, but might influence terrestial
+  species differently. We would first have to define a metric for river
+  quality.
+\end{enumerate}
+
+\hypertarget{synthesis}{%
+\subsection{SYNTHESIS}\label{synthesis}}
+
+Using the \texttt{mobsim} package from the DataWrangling module last
+week, simulate two local communities each containing 1000 individuals
+(\emph{N}) and 25 species (\emph{S}), but with one having a random
+spatial distribution and the other having a patchy spatial distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(mobsim)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: mobsim
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'mobsim' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comA }\OtherTok{\textless{}{-}} \FunctionTok{sim\_poisson\_community}\NormalTok{(}\AttributeTok{s\_pool =} \DecValTok{25}\NormalTok{, }\AttributeTok{n\_sim =} \DecValTok{1000}\NormalTok{, }\AttributeTok{sad\_type =} \StringTok{"lnorm"}\NormalTok{, }
+        \AttributeTok{sad\_coef =} \FunctionTok{list}\NormalTok{(}\StringTok{"meanlog"} \OtherTok{=} \DecValTok{2}\NormalTok{, }\StringTok{"sdlog"} \OtherTok{=} \DecValTok{1}\NormalTok{))}
+
+\NormalTok{comB }\OtherTok{\textless{}{-}} \FunctionTok{sim\_thomas\_community}\NormalTok{(}\AttributeTok{s\_pool =} \DecValTok{25}\NormalTok{, }\AttributeTok{n\_sim =} \DecValTok{1000}\NormalTok{, }\AttributeTok{sad\_type =} \StringTok{"lnorm"}\NormalTok{, }
+        \AttributeTok{sad\_coef =} \FunctionTok{list}\NormalTok{(}\StringTok{"meanlog"} \OtherTok{=} \DecValTok{2}\NormalTok{, }\StringTok{"sdlog"} \OtherTok{=} \DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Take ten (10) subsamples from each site using the quadrat function and
+answer the following questions:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comm\_matA }\OtherTok{\textless{}{-}} \FunctionTok{sample\_quadrats}\NormalTok{(comA, }\AttributeTok{n\_quadrats =} \DecValTok{10}\NormalTok{, }\AttributeTok{quadrat\_area =} \FloatTok{0.03}\NormalTok{, }
+             \AttributeTok{avoid\_overlap =}\NormalTok{ T, }\AttributeTok{plot=}\NormalTok{F)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in sample_quadrats(comA, n_quadrats = 10, quadrat_area = 0.03, avoid_overlap = T, : Cannot find a sampling layout with no overlap.
+##                                             Install the package spatstat for an improved method for non-overlapping squares,
+##                                             Use less quadrats or smaller quadrat area, or set avoid_overlap to FALSE.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comm\_matB }\OtherTok{\textless{}{-}} \FunctionTok{sample\_quadrats}\NormalTok{(comB, }\AttributeTok{n\_quadrats =} \DecValTok{10}\NormalTok{, }\AttributeTok{quadrat\_area =} \FloatTok{0.03}\NormalTok{, }
+             \AttributeTok{avoid\_overlap =}\NormalTok{ T, }\AttributeTok{plot=}\NormalTok{F)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in sample_quadrats(comB, n_quadrats = 10, quadrat_area = 0.03, avoid_overlap = T, : Cannot find a sampling layout with no overlap.
+##                                             Install the package spatstat for an improved method for non-overlapping squares,
+##                                             Use less quadrats or smaller quadrat area, or set avoid_overlap to FALSE.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Compare the average pairwise similarity among subsamples in site 1
+  (random spatial distribution) to the average pairswise similarity
+  among subsamples in site 2 (patchy spatial distribution).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comA.ds }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(comm\_matA}\SpecialCharTok{$}\NormalTok{spec\_dat,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{,}\AttributeTok{binary=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{comB.ds }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(comm\_matB}\SpecialCharTok{$}\NormalTok{spec\_dat,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{,}\AttributeTok{binary=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{comA.db }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(comm\_matA}\SpecialCharTok{$}\NormalTok{spec\_dat,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{)}
+\NormalTok{comB.db }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(comm\_matB}\SpecialCharTok{$}\NormalTok{spec\_dat,}\AttributeTok{method=}\StringTok{"bray"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Random Community\textquotesingle{}s Average Similarity (Sorensen index):"}\NormalTok{,}\FunctionTok{mean}\NormalTok{(comA.ds)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Random Community's Average Similarity (Sorensen index): 0.327179651063905"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Patchy Community\textquotesingle{}s Average Similarity (Sorensen index):"}\NormalTok{,}\FunctionTok{mean}\NormalTok{(comB.ds)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Patchy Community's Average Similarity (Sorensen index): 0.740014480798795"
+\end{verbatim}
+
+Use a t-test to determine whether compositional similarity was affected
+by the spatial distribution. \textgreater First we need to look at if
+the t-test is appropriate in this case.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(comA.ds,}\AttributeTok{breaks=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(comB.ds,}\AttributeTok{breaks=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-23-2.pdf}
+
+\begin{quote}
+Doesn't look like it from the historgrams because the limit of Sorensen
+index caps the values. To confirm, an F-test will do.
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var.test}\NormalTok{(comA.ds,comB.ds)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  F test to compare two variances
+## 
+## data:  comA.ds and comB.ds
+## F = 0.21009, num df = 44, denom df = 44, p-value = 8.817e-07
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.1154527 0.3823023
+## sample estimates:
+## ratio of variances 
+##          0.2100901
+\end{verbatim}
+
+\begin{quote}
+The F-test says that the variances between the datasets are different
+meaning that the t-test is not appropriate. Let's repeat for BC index.
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(comA.db,}\AttributeTok{breaks=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(comB.db,}\AttributeTok{breaks=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-25-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var.test}\NormalTok{(comA.db,comB.db)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  F test to compare two variances
+## 
+## data:  comA.db and comB.db
+## F = 0.32775, num df = 44, denom df = 44, p-value = 0.0003306
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.1801110 0.5964076
+## sample estimates:
+## ratio of variances 
+##          0.3277493
+\end{verbatim}
+
+\begin{quote}
+Again we see that the t-test is inappropriate. Probably some other test
+could be used but I don't know frequentist statistics that well. From
+looking at the histograms, the pairwise comparisons look very different,
+with the clustered communities having more communities that are
+completely different from one another.
+\end{quote}
+
+Finally, compare the compositional similarity of site 1 and site 2 to
+the source community?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RACcomA }\OtherTok{\textless{}{-}} \FunctionTok{rad.lognormal}\NormalTok{(comA}\SpecialCharTok{$}\NormalTok{census)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in Ops.factor(left, right): '>' not meaningful for factors
+\end{verbatim}
+
+\begin{verbatim}
+## Error in y + 0.1 : non-numeric argument to binary operator
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(RACcomA, }\AttributeTok{main =} \StringTok{"Random community"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RACcomAsample }\OtherTok{\textless{}{-}} \FunctionTok{rad.lognormal}\NormalTok{(comm\_matA}\SpecialCharTok{$}\NormalTok{spec\_dat)}
+\FunctionTok{plot}\NormalTok{(RACcomAsample, }\AttributeTok{main =} \StringTok{"Random community sample"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-26-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RACcomB }\OtherTok{\textless{}{-}} \FunctionTok{rad.lognormal}\NormalTok{(comB}\SpecialCharTok{$}\NormalTok{census)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in Ops.factor(left, right): '>' not meaningful for factors
+\end{verbatim}
+
+\begin{verbatim}
+## Error in y + 0.1 : non-numeric argument to binary operator
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(RACcomB, }\AttributeTok{main =} \StringTok{"Clustered community"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RACcomBsample }\OtherTok{\textless{}{-}} \FunctionTok{rad.lognormal}\NormalTok{(comm\_matB}\SpecialCharTok{$}\NormalTok{spec\_dat)}
+\FunctionTok{plot}\NormalTok{(RACcomBsample, }\AttributeTok{main =} \StringTok{"Clustered community sample"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-27-2.pdf}
+
+\begin{quote}
+We see that the rank abundance for the actual communities are most
+likely a geometric/power law distribution. With the sampling we see that
+the probability of observing a single observation of a species is much
+lower in the clustering case and that there are fewer species observed
+in total, this makes sense because of how the communities are generated.
+\end{quote}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Create a cluster diagram or ordination using your simulated data. Are
+  there any visual trends that would suggest a difference in composition
+  between site 1 and site 2? Describe.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comA.ward }\OtherTok{\textless{}{-}} \FunctionTok{hclust}\NormalTok{(comA.db, }\AttributeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}\FloatTok{0.1}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(comA.ward,}\AttributeTok{main =} \StringTok{"Random Communities: Ward Clustering"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Squared Bray{-}Curtis Distance"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comB.ward }\OtherTok{\textless{}{-}} \FunctionTok{hclust}\NormalTok{(comB.db, }\AttributeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}\FloatTok{0.1}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(comB.ward,}\AttributeTok{main =} \StringTok{"Clusered Communities: Ward Clustering"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Squared Bray{-}Curtis Distance"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.BetaDiversity_1_Worksheet_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+\begin{quote}
+We see that by looking at the axis values, that the clustered
+communities are farther apart from one another in composition than the
+random communities, though it does appear that we have some communities
+that are close to one another. It would probably be good to do other
+followup on this, such as does the BC distance correlate to other
+aspects, such as the Euclidian distance between sites.
+\end{quote}
+
+\end{document}

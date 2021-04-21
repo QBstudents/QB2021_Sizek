@@ -1,8 +1,10 @@
 ---
 title: '8\. Worksheet: Among Site (Beta) Diversity -- Part 1'
-author: "Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University"
+author: 'Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University'
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
 ---
   
@@ -239,7 +241,7 @@ In the R code chunk below, do the following:
 
 ```{r}
 order <- rev(attr(fish.db,"Labels"))
-levelplot(as.matrix(fish.db)[,order],aspect="iso",col.regions=viridisu,xlab="Doubs Site",ylab="Doubs Site", main="Bray-Curtis Distance",scales=list(cex=0.5))
+levelplot(as.matrix(fish.db)[,order],aspect="iso",col.regions=viridis,xlab="Doubs Site",ylab="Doubs Site", main="Bray-Curtis Distance",scales=list(cex=0.5))
 ``` 
 
 ### B.  Cluster Analysis
@@ -391,16 +393,36 @@ var.test(comA.db,comB.db)
 > Again we see that the t-test is inappropriate. Probably some other test could be used but I don't know frequentist statistics that well. From looking at the histograms, the pairwise comparisons look very different, with the clustered communities having more communities that are completely different from one another. 
 
 Finally, compare the compositional similarity of site 1 and site 2 to the source community?
-> I don't get this question in terms of the heterogenous community. The source community by definition in the heterogenous community is non random. 
+
 
 ```{r}
-#generate species richness for comA and comB
-
-#
+RACcomA <- rad.lognormal(comA$census)
+plot(RACcomA, main = "Random community")
+RACcomAsample <- rad.lognormal(comm_matA$spec_dat)
+plot(RACcomAsample, main = "Random community sample")
 ``` 
+
+```{r}
+RACcomB <- rad.lognormal(comB$census)
+plot(RACcomB, main = "Clustered community")
+RACcomBsample <- rad.lognormal(comm_matB$spec_dat)
+plot(RACcomBsample, main = "Clustered community sample")
+``` 
+
+> We see that the rank abundance for the actual communities are most likely a geometric/power law distribution. With the sampling we see that the probability of observing a single observation of a species is much lower in the clustering case and that there are fewer species observed in total, this makes sense because of how the communities are generated. 
 
 2) Create a cluster diagram or ordination using your simulated data. 
 Are there any visual trends that would suggest a difference in composition between site 1 and site 2? Describe.
 ```{r}
-
+comA.ward <- hclust(comA.db, method = "ward.D2")
+par(mar = c(1,5,2,2)+0.1)
+plot(comA.ward,main = "Random Communities: Ward Clustering",ylab="Squared Bray-Curtis Distance")
 ``` 
+
+```{r}
+comB.ward <- hclust(comB.db, method = "ward.D2")
+par(mar = c(1,5,2,2)+0.1)
+plot(comB.ward,main = "Clusered Communities: Ward Clustering",ylab="Squared Bray-Curtis Distance")
+``` 
+
+> We see that by looking at the axis values, that the clustered communities are farther apart from one another in composition than the random communities, though it does appear that we have some communities that are close to one another. It would probably be good to do other followup on this, such as does the BC distance correlate to other aspects, such as the Euclidian distance between sites. 
