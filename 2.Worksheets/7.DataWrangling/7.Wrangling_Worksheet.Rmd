@@ -1,9 +1,7 @@
 ---
-title: '7\. Data wrangling with simulated communitites'
-author: 'Sizek Z620: Quantitative Biodiversity, Indiana University'
-header-includes:
-   - \usepackage{array}
-output: pdf_document
+title: "7.Data wrangling with simulated communitites"
+author: "Sizek Z620: Quantitative Biodiversity, Indiana University"
+header-includes: \usepackage{array}
 geometry: margin=2.54cm
 ---
 
