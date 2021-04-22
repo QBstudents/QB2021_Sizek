@@ -240,9 +240,9 @@ But the SAR is also influenced by biological phenomena including dispersal limit
 1. Using the `sim_poisson_community` function from the `mobsim`, along with any of the data wrangling tools described above, construct a species area relationship (SAR).
 Feel free to choose different values for the the function's arguments. 
 Create an SAR plot and calculate the corresponding *z*-value. 
-```{r}
+```{r warning=FALSE}
 # Generate Communities
-comA <- sim_poisson_community(s_pool = 25, n_sim = 10000, sad_type = "lnorm", 
+comA <- sim_poisson_community(s_pool = 100, n_sim = 10000, sad_type = "lnorm", 
         sad_coef = list("meanlog" = 2, "sdlog" = 1))
 # visualize site
 #plot(com1)
@@ -254,21 +254,63 @@ q_areaMean <-function(community,q_area,q_n){
   row.names(comm_matA$spec_dat) <- quads;
   return( mean(specnumber(comm_matA$spec_dat)))
 }
-
-q_areas <- seq(0.0001,0.005,0.0001)
-for (q_area in q_areas){
-  q_areaMean(comA,q_area,10)
+q_areas <- 10^seq(-4.5,-1,0.01)
+# q_areas <- seq(0.0001,0.01,0.0001)
+qAreaMeans <-vector("list", length(q_areas))
+for (i in 1:length(q_areas)){
+  qAreaMeans[i] <- q_areaMean(comA,q_areas[i],10)
 }
+
 ``` 
+
+
+```{r}
+qlm <- lm(log(unlist(qAreaMeans),base=10)~log(q_areas,base=10))
+plot(log(q_areas,base=10),log(unlist(qAreaMeans),base=10))
+lines(log(q_areas,base=10),log(q_areas,base=10)*qlm$coefficients[2]+qlm$coefficients[1])
+``` 
+
+> The estimated z value is:
+
+```{r}
+qlm$coefficients[2]
+``` 
+
+> This is an underestimation of the true z-value, because we are reaching the saturation of quadrats (i.e. we are detecting all of the species present in the quadrats.) Depending on the purposes it might be better to estimate z prior to the saturation threshold. 
+
 2. The `sim_poisson_community`function simulates species that have a random spatial distribution.
 However, in nature, this is rarely the case. 
 Species often have patchy distributions, which can be simulated in `mobsim` using the the `sim_thomas_community` function.
 Include a plot of the patchy distribution using examples above.
 Then, create another SAR plot from the patchy community and compare its *z*-values to that of the random distribution. 
 
+```{r warning=FALSE}
+comB <- sim_thomas_community(s_pool = 100, n_sim = 10000, sad_type = "lnorm", 
+        sad_coef = list("meanlog" = 2, "sdlog" = 1))
+for (i in 1:length(q_areas)){
+  qAreaMeans[i] <- q_areaMean(comB,q_areas[i],10)
+}
+``` 
+
+```{r}
+qlm <- lm(log(unlist(qAreaMeans),base=10)~log(q_areas,base=10))
+plot(log(q_areas,base=10),log(unlist(qAreaMeans),base=10))
+lines(log(q_areas,base=10),log(q_areas,base=10)*qlm$coefficients[2]+qlm$coefficients[1])
+``` 
+
+> The estimated z value is:
+
+```{r}
+qlm$coefficients[2]
+``` 
+> This is lower than the z value for the random distribution. Note that this is less likely to be an underestimate because the species have not been saturated yet. 
+
+
 3. Explain the SAR patterns from your simulations along with any observed differences based on how we have simulated the communities.
 Are there any features that you might include with a more elaborate simulation? 
 Describe. 
+
+> First, we can see that in the random distribution, the sampling is saturating, while in the thompson model, the sampling is not saturating yet. This makes sense, as the clusting of organisms limits the organisms range more, so it is less likely to stumble upon them randomly. Depending on the purpose it might be better to have quadrats on a latice instead of random placement. I am somewhat interested in using the Forest GEO datasets to develop methods on detecting interspecies clustering. In that case, for the simulated model, we would have to have an interspecies associvity (or dissociativity) term. The thompson model would provide a random null type model, that could be used as a baseline of what the impact of random clusting is on apparent species associations.  
 
 ## SUBMITTING YOUR ASSIGNMENT
 Use Knitr to create a PDF of your completed 7.Wrangling_Worksheet.Rmd document, push it to GitHub, and create a pull request.
