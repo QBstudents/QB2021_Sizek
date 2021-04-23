@@ -1,6 +1,6 @@
 ---
 title: '8\. Worksheet: Among Site (Beta) Diversity -- Part 2'
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+author: "Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -39,12 +39,19 @@ In the R code chunk below, provide the code to:
 1. clear your R environment,
 2. print your current working directory,
 3. set your working directory to your "*/8.BetaDiversity*" folder, and
+```{r}
+rm(list=ls())
+getwd()
+setwd("D:/GitHub/QB2021_Sizek/2.Worksheets/8.BetaDiversity")
+
+```
+
 4. load the `vegan` R package (be sure to install if needed).  
 
-```{r}
-
-
-
+```{r, warning=FALSE}
+require(vegan)
+require(ade4)
+require(indicspecies)
 
 ```
 
@@ -54,9 +61,7 @@ In the R code chunk below, load the `doubs` dataset from the `ade4` package
 
 ```{r}
 # note, pleae do not print the dataset when submitting
-
-
-
+data(doubs)
 ```
 ## 3) HYPOTHESIS TESTING
 
@@ -69,21 +74,36 @@ In the code chunk below, test the hypothesis that fish community composition var
 2. use the multivariate analyses for categorical predictors to describe how fish community structure relates to habitat quality.
 
 ```{r}
-
-
-
-
-
-
-
-
+fish <- doubs$fish
+fish<- fish[-which(rowSums(fish)==0),]
+quality <- c(rep("HQ",13),rep("MQ",5),rep("LQ",6),rep("MQ",5))
+#PERMANOVA
+adonis(fish ~ quality, method ='bray',permutations =999)
 
 ```
+
+```{r}
+# Indicator Species
+indval <- multipatt(fish, cluster = quality, func = "IndVal.g",control=how(nperm = 999))
+plot(indval$str[,1],indval$str[,2],xlab="High Quality",ylab="Low Qualiy",type="n",main="Indicator Value")
+text(indval$str[,1],indval$str[,2],label=row.names(indval$str))
+``` 
+
+```{r}
+fish.rel <- decostand(fish, method ="total")
+phi <- multipatt(fish.rel, cluster = quality, func= "r.g",control=how(nperm=999))
+
+``` 
+
+```{r}
+plot(phi$str[,1],phi$str[,2],xlab="High Quality",ylab="Low Qualiy",type="n", main="Phi coefficient of Association")
+text(phi$str[,1],phi$str[,2],label=row.names(phi$str))
+``` 
 
 ***Question 1***: Based on the PERMANOVA, IndVal, and phi coefficient analyses, what did you learn about the relationship between habitat quality and the fish species composition?
 Are the different analyses consistent with one another and do they agree with the visualizations (heat maps, cluster dendograms, ordinations) that you created?
 
-> ***Answer 1***: 
+> ***Answer 1***: The quality metric here is highly correlated with the Bray Curtis measure. There are also some speices that are indicators of "high quality" habitats which are inversely related to those of "low quality" habitats as seen by both the indicator value plot, and the phi coefficient of association. This generally agrees with previous analysis and observations, such as with Alal, Phph, and Neba.
 
 
 ### B.  Multivariate Procedures for Continuous Designs
@@ -95,83 +115,212 @@ In the R code chunk below, do the following:
 2. use a Mantel test to test the hypothesis that fish assemblages are correlated with stream environmental variables.
 
 ```{r}
+fish.dist <- vegdist(doubs$fish[-8,],method='bray')
+env.dist <- vegdist(scale(doubs$env[-8,]),method = "euclid")
 
-
-
-
-
+mantel(fish.dist,env.dist)
 ```
 
 ***Question 2***: What do the results from our Mantel test suggest about fish diversity and stream environmental conditions? 
 How does this relate to your hypothesis about stream quality influencing fish communities?
 
-> ***Answer 2***:  
+> ***Answer 2***:  The Mantel test suggests that the distance between sampled sites correlates with the species correlations as determined by Bray-Curtis. This confirms the idea previously discussed, that the site quaility label correlates with the fish community diversity. We can not say that there is a causal relation with any of these tests as all of the tests we've preformed so far are corrlative not causitive, so I don't know about the stream quality influencing fish communities.
 
 ### ii.  Constrained Ordination
 In the R code chunk below, do the following:  
 
 1. create an environmental matrix of the water chemistry data included in the `doubs` dataset using forward and reverse selection of variables,
-2. conduct a redundancy analysis on the fish assemblages of the Doubs River,
-3. use a permutation test to determine the significance of the constrained analysis,
-4. use a permutation test to determine the correlation of each environmental factor on the constrained axes,
-5. calculate the explained variation on the first and second constrained axes,
-6. plot the constrained ordination results including labeled points for each site, and
-7. add vectors that demonstrate the influence of each environmental factor the constrained ordination.   
+
+```{r}
+env.chem <- as.matrix(doubs$env[-8,5:11])
+fish.db <- vegdist(fish,method="bray",upper=TRUE,diag=TRUE)
+doubs.dbrda <- dbrda(fish.db ~ . , as.data.frame(env.chem))
+var1 <- round(doubs.dbrda$CCA$eig[1]/sum(doubs.dbrda$CCA$eig),3) 
+var2 <- round(doubs.dbrda$CCA$eig[2]/sum(doubs.dbrda$CCA$eig),3) 
+var1
+var2
+ordiplot(doubs.dbrda)
+``` 
+
+> This first round shows that the eigenvector for multiple environmental variables are aligned with each other, this probably indicates that they are highly correlated. 
+
 ```{r}
 
+pairs(env.chem)
+``` 
 
+> from a brief glance betwen pho amm and bdo this does appear to be the case. 
 
+> forward case (no vectors):
 
+```{r}
+doubs.dbrda.mod0 <- dbrda(fish.db ~ 1, as.data.frame(env.chem))
+ordiplot(doubs.dbrda.mod0)
+``` 
 
+> Reverse case with all variables
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+doubs.dbrda.mod1 <- dbrda(fish.db ~ ., as.data.frame(env.chem))
+ordiplot(doubs.dbrda.mod1)
 ```
+
+> now do the different possible combinations of variables and accounts
+
+```{r}
+doubs.dbrda <- ordiR2step(doubs.dbrda.mod0,doubs.dbrda.mod1, perm.max=200)
+``` 
+
+```{r}
+doubs.dbrda$call
+doubs.dbrda$anova
+ordiplot(doubs.dbrda)
+``` 
+
+2. conduct a redundancy analysis on the fish assemblages of the Doubs River,
+3. use a permutation test to determine the significance of the constrained analysis,
+
+```{r}
+permutest(doubs.dbrda, permutations=999)
+``` 
+
+4. use a permutation test to determine the correlation of each environmental factor on the constrained axes,
+
+```{r}
+envfit(doubs.dbrda,env.chem[,c(4,6,7)],perm=999)
+``` 
+
+5. calculate the explained variation on the first and second constrained axes,
+
+```{r}
+var1 <- round(doubs.dbrda$CCA$eig[1]/sum(doubs.dbrda$CCA$eig),3) 
+var2 <- round(doubs.dbrda$CCA$eig[2]/sum(doubs.dbrda$CCA$eig),3) 
+var1
+var2
+``` 
+
+6. plot the constrained ordination results including labeled points for each site, and
+7. add vectors that demonstrate the influence of each environmental factor the constrained ordination.  
+
+```{r}
+ordiplot(doubs.dbrda,
+         xlab = paste("dbRDA 1(",var1*100,"%)"),
+         ylab = paste("dbRDA 2(",var2*100,"%)"))
+points(scores(doubs.dbrda,display = "wa"), bg="gray", col="gray", pch =19,cex=3)
+text(scores(doubs.dbrda, display = "wa"))
+
+``` 
 
 ***Question 3***: Based on the constrained ordination, what are the environmental variables (or groups of correlated variables) that seem to be contributing to variation in fish community structure?
 
-> ***Answer 3***: 
+> ***Answer 3***: oxygen, nitrogen, and the set of bdo, amm, and pho
 
 ### iii. Variation Partitioning
 In the code chunk below,   
+> Some notes on what is occuring here for my records. We are interested in how much (un)certainty environment and spatial variables are giving through a correlation matrix. The eigenvectors of the matrix are a function of the certainty of the matrix. In the case of PCNM, the  eigenvectors explain a specific amount of certainty of the system. From that we can calculate the conditional PCNM, the certainty conditioned on a maximization, to give us the mutual information between the different conditions, the environment and the space. The joint entropy expresses the residual, is how much uncertainty is left in the system by knowing the environment and the space. The language used is a direct copy from information theory and mutual information, but I'm less sure if the math would works it all the way through.
 
 1. Create a matrix model of the selected environmental variables,
+
+```{r}
+env.mod <- model.matrix(~ oxy +bdo +nit, as.data.frame(env.chem))[,-1]
+``` 
+
 2. Create a matrix model of the selected PCNM axes,
+
+```{r}
+rs <- rowSums(fish)/sum(fish)
+doubs.pcnmw <- pcnm(dist(doubs$x[-8,]),w=rs,dist.ret=TRUE)
+doubs.space <- as.data.frame(scores(doubs.pcnmw))
+doubs.pcnm.mod0 <-dbrda(fish.db ~ 1, doubs.space)
+doubs.pcnm.mod1 <- dbrda(fish.db ~ . , doubs.space)
+step.pcnm <- ordiR2step(doubs.pcnm.mod0,doubs.pcnm.mod1,perm.max=200)
+
+plot(step.pcnm)
+``` 
+
+```{r}
+step.pcnm$anova
+``` 
 3. Perform constrained and partial constrained ordinations using the spatial and environmental models you just created,
+
+```{r}
+space.mod <- model.matrix(~ PCNM2 + PCNM3 + PCNM5 + PCNM1 + PCNM13 + PCNM16 + PCNM6, doubs.space)[,-1]
+``` 
+
 4. Test the significance of each of your constrained ordinations using permutation tests,
+
+```{r}
+doubs.total.env <- dbrda(fish.db ~ env.mod)
+doubs.total.space <- dbrda(fish.db ~ space.mod)
+
+doubs.env.cond.space <- dbrda(fish.db ~ env.mod + Condition(space.mod))
+doubs.space.cond.env <- dbrda(fish.db ~ space.mod + Condition(env.mod))
+
+permutest(doubs.env.cond.space,permutations=999)
+permutest(doubs.space.cond.env,permutations=999)
+permutest(doubs.total.env,permutations=999)
+permutest(doubs.total.space,permutations=999)
+
+``` 
+
 5. Partition the variation among sites into the relative importance of space, environment, spatially structured environment, and residuals,
+
+```{r}
+doubs.varpart <- varpart(fish.db,env.mod,space.mod)
+doubs.varpart
+``` 
+
 6. Plot the variation partitioning output to visualize it.  
 ```{r}
-
-
-
-
-
-
+par(mar=c(2,2,2,2))
+plot(doubs.varpart)
+text(1,0.25,"Space")
+text(0,0.25,"Env")
+mtext("Variation Partitioning of Doubs Fish Diversity",side =3)
 
 ```
 
 ***Question 4***: Interpret the variation partitioning results.   
 
-> ***Answer 4***: 
+> ***Answer 4***: I don't know how to explain this succinctly. From what I understand, we are comparing two eigenvectors. They are pointing in different directions, so the shared component, the information provided by the environment and space, resolves 0.37 of the variation of species diversity. The two eigenvectors independent components resolve another 0.13 and 0.24 of the variation in species diversity, while their is an additional 0.27 not accounted for by these two eigenvectors, the residuals. Because this is not causal analysis, we can say that the environment and space information correlates to the species diversity more so than just the space or the environment (with environment being the lowest). 
 
 ## SYNTHESIS
 
 As in the previous worksheet, use the `mobsim` package from the DataWrangling module to simulate two local communities each containing 1000 individuals (*N*) and 25 species (*S*), but with one having a random spatial distribution and the other having a patchy spatial distribution. 
+
+```{r}
+require(mobsim)
+
+comA <- sim_poisson_community(s_pool = 25, n_sim = 1000, sad_type = "lnorm", 
+        sad_coef = list("meanlog" = 2, "sdlog" = 1))
+
+comB <- sim_thomas_community(s_pool = 25, n_sim = 1000, sad_type = "lnorm", 
+        sad_coef = list("meanlog" = 2, "sdlog" = 1))
+``` 
+
 Take ten (10) subsamples from each site using the quadrat function and answer the following questions:
 
-1) Perform a PERMANOVA to test whether or not the spatial distribution of species affects species composition.
+```{r}
+comm_matA <- sample_quadrats(comA, n_quadrats = 10, quadrat_area = 0.03, 
+             avoid_overlap = T, plot=F)
+row.names(comm_matA$spec_dat)= paste("R",row.names(comm_matA$spec_dat),sep="")
+comm_matB <- sample_quadrats(comB, n_quadrats = 10, quadrat_area = 0.03, 
+             avoid_overlap = T, plot=F)
+row.names(comm_matB$spec_dat)= paste("C",row.names(comm_matB$spec_dat),sep="")
+```  
+
+1) Perform a PERMANOVA to test whether or not the spatial distribution of species affects species composition
+
+> This question is poorly worded. Because of the data structure, we can not determine causation, only correlation. Also, there is no indication of what the treatments/replicates are. Here is a random go at a potential way that this could be done, but it isn't that good because of the different underlying distributions. 
+
+```{r}
+require(plyr)
+
+genstructure <- c(rep("Random",10),rep("Clustered",10))
+comm_matAB <- rbind.fill(comm_matA$spec_dat,comm_matB$spec_dat)
+comm_matAB[is.na(comm_matAB)] <-0
+adonis(comm_matAB ~ genstructure, method="bray", permutations=999)
+``` 
 
 2) Load the dataset you are using for your Team Project. 
 Perform an ordination to visualize your dataset.
