@@ -1,8 +1,10 @@
 ---
 title: '8\. Worksheet: Among Site (Beta) Diversity -- Part 2'
-author: "Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University"
+author: 'Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University'
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
 ---
 
@@ -328,3 +330,49 @@ Using this ordination, develop some hypotheses relevant to $\beta$-diversity.
 Use a statistic to test one of these hypotheses.
 Succinctly explain the finding and its relevance to your system.
 
+```{r}
+# Woody trees data
+woodytreedeamssm3 <- as.data.frame(read.csv("data/woodytrees.csv",header=TRUE))
+rownames(woodytreedeamssm3)<- woodytreedeamssm3[,1]
+woodytreedeamssm3<- woodytreedeamssm3[,-1]
+# US population Census 1920
+USCensus <- as.data.frame(read.csv("data/IndianaCensus.csv",header=TRUE))
+rownames(USCensus) <- USCensus[,1]
+USCensus <- USCensus[,-1]
+# Census of Agriculture of 1920
+AgCensus <- as.data.frame(read.csv("data/IndianaAgCensus1920.csv",header=TRUE))
+rownames(AgCensus) <- AgCensus[,1]
+AgCensus <- AgCensus[,-1]
+``` 
+
+```{r}
+popData <- cbind(USCensus[-1,],AgCensus[-1,])
+popData$pcImproved1920 <- popData$ImprovedFarmAcres1920/popData$LandArea1920
+popData$popDensity1920 <- popData$X1920/popData$LandArea1920
+
+
+woodytreedeamssm3.db <- vegdist(woodytreedeamssm3,method='bray',binary = TRUE,upper=TRUE,diag=TRUE)
+
+woodytreedeamssm3.dbrda <- dbrda(woodytreedeamssm3.db ~.,as.data.frame(popData))
+ordiplot(woodytreedeamssm3.dbrda)
+``` 
+Cool, from this it is clear that the census population levels are minimally correlated, while the land area of counties and improved acres are more correlated. 
+
+```{r}
+woodytreedeamssm3.dbrda.mod0 <-dbrda(woodytreedeamssm3.db~1,as.data.frame(popData))
+# ordiplot(woodytreedeamssm3.dbrda.mod0)
+``` 
+
+```{r}
+woodytreedeamssm3.dbrda.mod1 <- dbrda(woodytreedeamssm3.db~., as.data.frame(popData))
+# ordiplot(woodytreedeamssm3.dbrda.mod1)
+``` 
+
+```{r}
+woodytreedeamssm3.dbrda <- ordiR2step(woodytreedeamssm3.dbrda.mod0,woodytreedeamssm3.dbrda.mod1,perm.max=200)
+
+woodytreedeamssm3.dbrda$anova
+ordiplot(woodytreedeamssm3.dbrda)
+``` 
+
+OOF only 4% of variation explained by these the agricultural information we inputted, which probably isn't that bad given that we are talking about species diversity across an entire state, but also not good because we don't have a set of variables that explain the variance found. There is high likelyhood that this variation could just be due to somewhat random effects. 
