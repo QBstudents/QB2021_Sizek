@@ -1,6 +1,6 @@
 ---
 title: '11\. Worksheet: Phylogenetic Diversity - Traits'
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+author: "Herbert Sizek; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -48,7 +48,7 @@ In the R code chunk below, provide the code to:
 ```{r}
 rm(list = ls())
 getwd()
-setwd("~/GitHub/QB-2019/2.Worksheets/11.PhyloTraits")
+setwd("D:/GitHub/QB2021_Sizek/2.Worksheets/11.PhyloTraits")
 
 ```
 
@@ -63,13 +63,7 @@ In this exercise, we will take a phylogenetic approach to mapping phosphorus res
 ***Question 1***: Using your favorite text editor, compare the `p.isolates.fasta` file and the `p.isolates.afa` file. 
 Describe the differences that you observe between the two files. 
 
-> ***Answer 1***: 
-
-In the R code chunk below, do the following:
-1. read your alignment file,
-2. convert the alignment to a DNAbin object,
-3. select a region of the gene to visualize (try various regions), and
-4. plot the alignment using a grid to visualize rows of sequences.
+> ***Answer 1***: The AFA file has some alignment spacing in it, while fasta is just the reads/processed reads. 
 
 ```{r}
 package.list <- c('ape', 'seqinr', 'phylobase', 'adephylo', 'geiger', 'picante', 'stats', 'RColorBrewer', 'caper', 'phylolm', 'pmc', 'ggplot2', 'tidyr', 'dplyr', 'phangorn', 'pander') 
@@ -82,14 +76,27 @@ for (package in package.list) {
 
 ```
 
+In the R code chunk below, do the following:
+1. read your alignment file,
+2. convert the alignment to a DNAbin object,
+3. select a region of the gene to visualize (try various regions), and
+4. plot the alignment using a grid to visualize rows of sequences.
+
+```{r}
+read.aln <-read.alignment(file= './data/p.isolates.afa',format='fasta')
+p.DNAbin <- as.DNAbin(read.aln)
+window <- p.DNAbin[,500:700]
+image.DNAbin(window,cex.lab=0.50)
+``` 
+
 ***Question 2***:  Make some observations about the `muscle` alignment of the 16S rRNA gene sequences for our bacterial isolates and the outgroup, *Methanosarcina*, a member of the domain Archaea. 
 Move along the alignment by changing the values in the `window` object. 
 
 a. Approximately how long are our sequence reads?  
 b. What regions do you think would are appropriate for phylogenetic inference and why?  
 
-> ***Answer 2a***:   
-> ***Answer 2b***:  
+> ***Answer 2a***: About 600 to 700 bp. 
+> ***Answer 2b***:  probably between 200 and 700 because it is present in most of the groups for the majority of that region. 
 
 ## 4) MAKING A PHYLOGENETIC TREE
 
@@ -105,16 +112,20 @@ In the R code chunk below, do the following:
 4. plot the rooted tree. 
 
 ```{r}
+seq.dist.raw <- dist.dna(p.DNAbin,model="raw",pairwise.deletion = FALSE)
+nj.tree <- bionj(seq.dist.raw)
+outgroup <- match("Methanosarcina", nj.tree$tip.label)
+nj.rooted <- root(nj.tree,outgroup,resolve.root=TRUE)
 
-
+par(mar= c(1,1,2,1)+0.1)
+plot.phylo(nj.rooted,main = "Neighbor Joining Tree","phylogram",use.edge.length = FALSE,direction = "right",label.offset=1,cex=0.6)
+add.scale.bar(cex=0.7)
 ```
 
 ***Question 3***: What are the advantages and disadvantages of making a neighbor joining tree?   
 
 
-> ***Answer 3***:  
- 
-
+> ***Answer 3***: Biologically the assumed transitions might not have equal evolutionary weight or might have switching behaviors, so depending on the consistency of the sequence ourtcomes would vary. The simplicity makes if fairly fast untill you are comparing distances between lots of sequences. Because it is distance based you could get odd/unclear groupings because of structures: "AAB" "AAA" and "ABA" could be clustered in multiple different ways depending on the implementation choices. 
 
 ### B) SUBSTITUTION MODELS OF DNA EVOLUTION 
 
@@ -125,8 +136,10 @@ In the R code chunk below, do the following:
 4. create a cophylogenetic plot to compare the topologies of the trees.
 
 ```{r}
-
-
+seq.dist.F84 <- dist.dna(p.DNAbin,model="F84",pairwise.deletion = FALSE)
+par(mar = c(5,5,2,1)+0.1)
+plot(seq.dist.raw,seq.dist.F84,pch =20,col ="red",las =1,asp=1,xlab="Raw Distance",ylab = "F84 Distance",xlim=c(0,0.7),ylim=c(0,0.7))
+abline(b=1,a=0,lty=2)
 ```
 
 In the R code chunk below, do the following:  
